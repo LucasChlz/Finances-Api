@@ -9,7 +9,7 @@ export class Users1614360374704 implements MigrationInterface {
                 columns: [
                     {
                         name: "id",
-                        type: "int",
+                        type: "varchar",
                         isPrimary: true
                     },
                     {
