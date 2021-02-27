@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class Bills1614456995219 implements MigrationInterface {
+export class Bills1614458777954 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
@@ -9,7 +9,7 @@ export class Bills1614456995219 implements MigrationInterface {
                 columns: [
                     {
                         name: 'id',
-                        type: 'bigint',
+                        type: 'varchar',
                         isPrimary: true
                     },
                     {
@@ -26,16 +26,30 @@ export class Bills1614456995219 implements MigrationInterface {
                     },
                     {
                         name: 'expiration',
-                        type: 'date'
+                        type: 'varchar'
                     },
                     {
                         name: 'payed',
                         type: 'int'
                     },
                     {
+                        name: 'user_id',
+                        type: 'varchar'
+                    },
+                    {
                         name: 'created_at',
                         type: 'timestamp',
                         default: 'now()'
+                    }
+                ],
+                foreignKeys: [
+                    {
+                       name: 'FKUser',
+                       referencedTableName: "users" ,
+                       referencedColumnNames: ["id"],
+                       columnNames: ["user_id"],
+                       onDelete: "CASCADE",
+                       onUpdate: "CASCADE"
                     }
                 ]
             })
@@ -47,4 +61,3 @@ export class Bills1614456995219 implements MigrationInterface {
     }
 
 }
-

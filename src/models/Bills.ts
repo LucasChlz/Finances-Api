@@ -1,9 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import { User } from './User';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("bills")
 class Bills {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn("uuid")
     readonly id: string
 
     @Column()
@@ -18,8 +19,15 @@ class Bills {
     @Column()
     payed: number;
 
-    @CreateDateColumn()
-    expiration: Date;
+    @Column()
+    user_id: string
+
+    @ManyToOne(() => User)
+    @JoinColumn({ name: "user_id"})
+    user: User
+
+    @Column()
+    expiration: string;
 
     @CreateDateColumn()
     created_at: Date;
