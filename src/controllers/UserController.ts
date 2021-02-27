@@ -54,11 +54,14 @@ class UserController {
 
     async logout(request: Request, response: Response) {
 
-        if (request.session.userId) {
-            request.session.destroy((err) => {
-                return response.status(200).json({ message: 'logout'})
-            });
+        if (!request.session.userId) {
+            return response.status(401).json({ message: "you don't have a account to log out"})
         }
+        
+        return request.session.destroy((err) => {
+            return response.status(200).json({ message: 'logout'})
+        });
+
     }
 }
 
