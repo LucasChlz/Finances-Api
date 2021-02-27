@@ -1,6 +1,5 @@
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
-import { sign } from "jsonwebtoken";
 import { getCustomRepository } from "typeorm";
 import { UserRepository } from "../repositories/UsersRepository";
 
@@ -39,16 +38,17 @@ class UserController {
             return response.status(401).json({ error: 'User not found'})
 
         if (!await bcrypt.compare(password, findUser.password)) 
-            return response.status(401).json({ error: 'Invalid password'})
+            return response.status(401).json({ error: 'Invalid password'}) 
 
-        const token = sign({
-            user_id: findUser.id,
-            email: findUser.email 
-        }, process.env.JWT_SECRET,{
-            expiresIn: "10h"
-        });
+        request.session.userId = findUser.id;
+        request.session.name = findUser.name;
+        request.session.email = findUser.email;
+
+        const userToken = request.session.userId;
+        const userName = request.session.name;
+        const userEmail = request.session.email;
         
-        return response.status(200).json({ token: token}); 
+        return response.status(200).json({ userToken, userName, userEmail }); 
 
     }
 }
