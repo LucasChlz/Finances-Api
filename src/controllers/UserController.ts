@@ -51,6 +51,15 @@ class UserController {
         return response.status(200).json({ userToken, userName, userEmail }); 
 
     }
+
+    async logout(request: Request, response: Response) {
+
+        if (request.session.userId) {
+            request.session.destroy((err) => {
+                return response.status(200).json({ message: 'logout'})
+            });
+        }
+    }
 }
 
 export { UserController }
