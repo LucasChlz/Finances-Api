@@ -5,8 +5,6 @@ const router = Router();
 
 const userController = new UserController();
 
-router.post('/store', userController.store)
-router.post('/login', userController.login)
-router.post('/logout', userController.logout)
+router.post('/store', userController.store);
 
 module.exports = app => app.use('/users', router);

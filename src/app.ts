@@ -13,6 +13,7 @@ app.use(session({secret: process.env.SESSION_SECRET, saveUninitialized: true, re
 app.use(express.json());
 
 require('./routes/users.routes')(app)
+require('./routes/session.routes')(app)
 require('./routes/bills.routes')(app)
 
 export { app }
