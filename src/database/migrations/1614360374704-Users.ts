@@ -25,6 +25,10 @@ export class Users1614360374704 implements MigrationInterface {
                         type: "varchar"
                     },
                     {
+                        name: "currentValue",
+                        type: "float"
+                    },
+                    {
                         name: "created_at",
                         type: "timestamp",
                         default: "now()"

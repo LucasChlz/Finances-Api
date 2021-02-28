@@ -15,6 +15,9 @@ class User {
     @Column()
     password: string;
 
+    @Column()
+    currentValue: number;
+
     @CreateDateColumn()
     created_at: Date;
 

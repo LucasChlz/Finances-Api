@@ -22,7 +22,7 @@ export class Bills1614458777954 implements MigrationInterface {
                     },
                     {
                         name: 'value',
-                        type: 'decimal'
+                        type: 'float'
                     },
                     {
                         name: 'expiration',
