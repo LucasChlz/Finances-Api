@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
+import { Bills } from "../models/Bills";
+import { User } from "../models/User";
 import { BillsRepository } from "../repositories/BillsRepository";
+import { UserRepository } from "../repositories/UsersRepository";
 
 class BillsController {
 
@@ -17,6 +20,48 @@ class BillsController {
         await billsRepo.save(bills);
         
         return response.status(201).json(bills);
+    }
+    
+    async PayBillStatus(request: Request, response: Response) {
+        const billId = request.params.billId;
+
+        const user_id = request.session.userId;
+        
+        const billsRepo = getCustomRepository(BillsRepository);
+        const userRepo = getCustomRepository(UserRepository);
+        
+        const getBill = await billsRepo.createQueryBuilder("bills")
+        .where("bills.id = :billId AND bills.user_id = :user_id", { billId, user_id }).getOne();
+
+        const getUser = await userRepo.createQueryBuilder("users")
+        .where("users.id = :user_id", { user_id }).getOne();
+
+        if (!getBill) return response.status(401).json({ message: "bill nonexistent"});
+        
+        if (getBill.payed === 1) {
+
+            const updatePayed = billsRepo.update({ id: billId, user_id  }, { payed: 0 }).then((err) => {
+
+                const newUserValueUnpayed = getUser.currentValue + getBill.value;
+
+                const updateCurrentValue = userRepo.update({ id: user_id }, { currentValue: newUserValueUnpayed }).then((err) => {
+                    return response.status(201).json({ message: "Bill unpayed" });
+                })
+                
+            })
+
+        } else if (getBill.payed === 0) {
+
+            const updatePayed = billsRepo.update({ id: billId, user_id  }, { payed: 1 }).then((err) => {
+
+                const newUserValuePayed = getUser.currentValue - getBill.value;
+
+                const updateCurrentValue = userRepo.update({ id: user_id }, { currentValue: newUserValuePayed }).then((err) => {
+                    return response.status(201).json({ message: "Bill payed" });
+                })
+                
+            })
+        }   
     }
 }
 
