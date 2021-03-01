@@ -21,6 +21,17 @@ class BillsController {
         
         return response.status(201).json(bills);
     }
+
+    async listBills(request: Request, response: Response) {
+        const user_id = request.session.userId;
+
+        const billsRepo = getCustomRepository(BillsRepository);
+
+        const allBills = await billsRepo.createQueryBuilder("bills")
+        .where("bills.user_id = :user_id", { user_id}).getMany();
+
+        return response.status(201).json(allBills);
+    }
     
     async PayBillStatus(request: Request, response: Response) {
         const billId = request.params.billId;
